@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#07090d">
+<meta name="robots" content="noindex,nofollow">
+<title>Solana Memecoin Desk · PAPER · live</title>
+<style>
+:root{--bg:#07090d;--card:#0e1218;--card2:#121821;--line:#1c2430;--txt:#e7edf5;--mut:#7d8a9c;--dim:#4d5868;--g:#22e39a;--r:#ff5470;--y:#ffc44d;--b:#5ab0ff;--p:#b48cff}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--txt);font:14px/1.35 -apple-system,BlinkMacSystemFont,"SF Pro Text","Inter","Segoe UI",Roboto,sans-serif}
+.mono{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;font-variant-numeric:tabular-nums}
+.wrap{max-width:520px;margin:0 auto;padding:max(10px,env(safe-area-inset-top)) 12px 40px}
+.top{display:flex;align-items:center;gap:8px;justify-content:space-between}
+.brand{font-weight:800;letter-spacing:.08em;font-size:12px}
+.badge{font-size:10px;font-weight:800;letter-spacing:.1em;padding:3px 7px;border-radius:6px;background:#2a2207;color:var(--y);border:1px solid #5a4710}
+.live{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--mut)}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--dim)}
+.dot.on{background:var(--g);box-shadow:0 0 0 0 rgba(34,227,154,.7);animation:pulse 1.6s infinite}
+.dot.warn{background:var(--y)}.dot.bad{background:var(--r)}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(34,227,154,.6)}70%{box-shadow:0 0 0 8px rgba(34,227,154,0)}100%{box-shadow:0 0 0 0 rgba(34,227,154,0)}}
+.banner{margin:10px 0;padding:7px 10px;border-radius:10px;background:#1a1606;border:1px solid #3d3410;color:#e9cf7a;font-size:11.5px}
+.hero{padding:6px 2px 2px}
+.eqlabel{color:var(--mut);font-size:11px;letter-spacing:.08em;font-weight:700}
+.eq{font-size:44px;font-weight:800;letter-spacing:-.02em;line-height:1.05;margin-top:4px;transition:color .4s}
+.eq small{font-size:20px;color:var(--mut);font-weight:700;margin-left:6px}
+.usd{color:var(--mut);font-size:15px;margin-top:2px}
+.sub{color:var(--mut);font-size:12.5px;margin-top:6px}
+.sub b{color:var(--txt);font-weight:700}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:12px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px}
+.kpi .l{font-size:9.5px;color:var(--mut);letter-spacing:.06em;font-weight:700}
+.kpi .v{font-size:13px;font-weight:700;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pos{color:var(--g)}.neg{color:var(--r)}.flat{color:var(--mut)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px;margin-top:12px}
+.h{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--mut);font-weight:800;letter-spacing:.08em;margin-bottom:8px}
+.h span:last-child{font-weight:600;letter-spacing:0}
+#chart{width:100%;height:190px;display:block}
+.ticker{margin:12px -12px 0;overflow:hidden;border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:#0a0d12;mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent)}
+.track{display:flex;gap:18px;padding:9px 0;width:max-content;animation:scroll 40s linear infinite}
+@keyframes scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.tk{display:flex;align-items:center;gap:6px;font-size:12.5px;white-space:nowrap}
+.tk img,.av{width:18px;height:18px;border-radius:50%;object-fit:cover;background:#1b2230}
+.tk .s{font-weight:700}
+.pills{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.pill{background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:8px 9px}
+.pill .n{font-size:9.5px;color:var(--mut);font-weight:800;letter-spacing:.08em}
+.pill .st{display:flex;align-items:center;gap:6px;font-weight:800;font-size:12.5px;margin-top:3px}
+.pill .m{font-size:10.5px;color:var(--dim);margin-top:2px}
+.pill.full{grid-column:1/-1}
+.dec{display:flex;gap:10px;align-items:flex-start}
+.tag{font-size:10.5px;font-weight:800;padding:3px 7px;border-radius:6px;letter-spacing:.05em;flex:none}
+.t-BUY{background:#0c2b20;color:var(--g)}.t-SELL{background:#2e0f17;color:var(--r)}.t-HOLD{background:#13233a;color:var(--b)}
+.t-WAIT{background:#1d1d25;color:#aab}.t-REJECT{background:#2a2007;color:var(--y)}.t-WHALE{background:#1f1636;color:var(--p)}
+.t-SCAN,.t-NEW,.t-DECISION{background:#151b24;color:var(--mut)}
+.prow{display:flex;gap:10px;align-items:center;padding:10px 0;border-top:1px solid var(--line)}
+.prow:first-of-type{border-top:0}
+.prow .av{width:36px;height:36px}
+.prow .mid{flex:1;min-width:0}
+.prow .sym{font-weight:800;font-size:15px}
+.prow .meta{font-size:11px;color:var(--mut)}
+.prow .rt{text-align:right}
+.prow .pnl{font-weight:800;font-size:15px}
+.bar{height:4px;background:#1a212c;border-radius:4px;margin-top:6px;position:relative;overflow:hidden}
+.bar i{position:absolute;top:0;bottom:0;width:3px;background:var(--txt);border-radius:2px;transition:left .8s}
+.bar .sl{position:absolute;left:0;top:0;bottom:0;width:23%;background:rgba(255,84,112,.25)}
+.bar .tp{position:absolute;right:0;top:0;bottom:0;width:10%;background:rgba(34,227,154,.25)}
+.seg{display:flex;gap:6px}
+.seg button{background:var(--card2);color:var(--mut);border:1px solid var(--line);border-radius:8px;padding:4px 9px;font-size:11px;font-weight:700}
+.seg button.on{color:var(--txt);border-color:#334}
+.fi{display:flex;gap:9px;padding:9px 0;border-top:1px solid var(--line);animation:in .5s ease}
+.fi:first-child{border-top:0}
+@keyframes in{from{opacity:0;transform:translateY(-6px);background:#13202a}to{opacity:1;transform:none}}
+.fi .tm{font-size:10.5px;color:var(--dim);width:54px;flex:none;padding-top:2px}
+.fi .bd{font-size:12.5px;min-width:0}
+.fi .bd b{font-weight:800}
+.fi .why{color:var(--mut);font-size:11.5px;margin-top:2px;word-break:break-word}
+.foot{color:var(--dim);font-size:10.5px;margin-top:14px;line-height:1.6}
+.flash-up{animation:fu .9s}.flash-dn{animation:fd .9s}
+@keyframes fu{0%{color:var(--g)}100%{}}@keyframes fd{0%{color:var(--r)}100%{}}
+.empty{color:var(--dim);font-size:12px;padding:6px 0}
+#wait{color:var(--mut);font-size:13px;padding:30px 0;text-align:center}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <div style="display:flex;align-items:center;gap:8px"><span class="brand">SOLANA MEMECOIN DESK</span><span class="badge">PAPER</span></div>
+    <div class="live"><span id="ldot" class="dot"></span><span id="ltxt">CONNECTING</span></div>
+  </div>
+  <div class="banner">PAPER TRADING · simulated fills on real market data · no wallet, no keys, no on-chain trades.</div>
+  <div id="wait">Connecting to the live relay and requesting the latest engine snapshot…</div>
+  <div id="app" style="display:none">
+    <div class="hero">
+      <div class="eqlabel">PAPER EQUITY</div>
+      <div class="eq mono" id="eq">–</div>
+      <div class="usd mono" id="usd"></div>
+      <div class="sub" id="sub"></div>
+      <div class="kpis">
+        <div class="kpi"><div class="l">REALIZED</div><div class="v mono" id="rpl">–</div></div>
+        <div class="kpi"><div class="l">UNREALIZED</div><div class="v mono" id="upl">–</div></div>
+        <div class="kpi"><div class="l">TODAY</div><div class="v mono" id="dpl">–</div></div>
+        <div class="kpi"><div class="l">W / L</div><div class="v mono" id="wl">–</div></div>
+      </div>
+    </div>
+    <div class="card" style="padding:12px 8px 6px">
+      <div class="h" style="padding:0 4px"><span>EQUITY CURVE (SOL)</span><span class="mono" id="eqrange"></span></div>
+      <canvas id="chart"></canvas>
+    </div>
+    <div class="ticker"><div class="track" id="track"></div></div>
+    <div class="card">
+      <div class="h"><span>SYSTEM STATUS</span><span id="srvt" class="mono"></span></div>
+      <div class="pills" id="pills"></div>
+    </div>
+    <div class="card" id="deccard">
+      <div class="h"><span>LATEST ENGINE DECISION</span><span id="dect" class="mono"></span></div>
+      <div class="dec" id="dec"></div>
+    </div>
+    <div class="card">
+      <div class="h"><span>OPEN POSITIONS</span><span id="poscount"></span></div>
+      <div id="positions"></div>
+    </div>
+    <div class="card">
+      <div class="h"><span>DECISIONS / ACTIVITY</span>
+        <span class="seg"><button id="fDec" class="on">Trades &amp; decisions</button><button id="fAll">All</button></span></div>
+      <div id="feed"></div>
+    </div>
+    <div class="foot mono" id="foot"></div>
+  </div>
+</div>
+<script>
+const RELAY="https://smee.io/xQItzvhUNhovDPA9x3zznjCMwigmrqwd";
+const PUBKEY_B64="MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEWx4aLm5mT+rysZkHxOnljuepWU5hv9VrhxwuIP0fj/aOuNTLzv+ml3r9YHIjLYrORI/vl0OS+n+UHm4+edlYcg==";
+const TZ="Europe/Brussels";
+const S={verified:0,rejected:0,lastMsgAt:0,lastT:0,lastLat:null,state:null,feed:new Map(),eq:[],anim:null,filter:"dec",es:null,connected:false,cid:Math.random().toString(36).slice(2,10)};
+const $=id=>document.getElementById(id);
+const b64=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
+let KEY=null;
+async function key(){ if(KEY) return KEY; KEY=await crypto.subtle.importKey("spki",b64(PUBKEY_B64),{name:"ECDSA",namedCurve:"P-256"},false,["verify"]); return KEY; }
+async function verify(p,s){ try{ return await crypto.subtle.verify({name:"ECDSA",hash:"SHA-256"},await key(),b64(s),new TextEncoder().encode(p)); }catch(e){ return false; } }
+const fmtT=ms=>ms?new Intl.DateTimeFormat("en-GB",{timeZone:TZ,hour:"2-digit",minute:"2-digit",second:"2-digit"}).format(new Date(ms)):"–";
+const fmtDT=ms=>ms?new Intl.DateTimeFormat("en-GB",{timeZone:TZ,day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"}).format(new Date(ms)):"–";
+const sgn=(x,d=4)=>x==null?"–":(x>0?"+":"")+x.toFixed(d);
+const cls=x=>x==null||Math.abs(x)<1e-12?"flat":(x>0?"pos":"neg");
+function px(x){ if(x==null) return "–"; if(x>=1) return "$"+x.toLocaleString("en-US",{maximumFractionDigits:2}); if(x>=0.01) return "$"+x.toFixed(4); return "$"+x.toPrecision(3); }
+function mc(x){ if(x==null) return "–"; if(x>=1e9) return "$"+(x/1e9).toFixed(2)+"B"; if(x>=1e6) return "$"+(x/1e6).toFixed(2)+"M"; if(x>=1e3) return "$"+(x/1e3).toFixed(1)+"K"; return "$"+x.toFixed(0); }
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const safeUrl=u=>/^https:\/\//.test(u||"")?u:"";
+function ago(ms){ if(!ms) return "–"; const s=Math.max(0,Math.round((Date.now()-ms)/1000)); return s<60?s+"s ago":s<3600?Math.round(s/60)+"m ago":Math.round(s/3600)+"h ago"; }
+function dur(ms){ const m=Math.max(0,Math.round(ms/60000)); const d=Math.floor(m/1440),h=Math.floor(m%1440/60),mm=m%60; return d?`${d}d ${h}h`:h?`${h}h ${mm}m`:`${mm}m`; }
+
+// ---------- relay ----------
+async function hello(kind){ try{ await fetch(RELAY,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({[kind]:1,cid:S.cid})}); }catch(e){} }
+function connect(){
+  if(S.es){ try{S.es.close();}catch(e){} }
+  setLive("warn","CONNECTING");
+  const es=new EventSource(RELAY); S.es=es;
+  es.addEventListener("ready",()=>{ S.connected=true; S.lastMsgAt=Date.now(); hello("hello"); });
+  es.addEventListener("ping",()=>{ S.lastMsgAt=Date.now(); });
+  es.onmessage=async ev=>{
+    S.lastMsgAt=Date.now();
+    let m; try{ m=JSON.parse(ev.data); }catch(e){ return; }
+    const b=m&&m.body; if(!b||typeof b.p!=="string"||typeof b.s!=="string") return; // hellos/pings/foreign posts
+    if(!(await verify(b.p,b.s))){ S.rejected++; return; }
+    let p; try{ p=JSON.parse(b.p); }catch(e){ return; }
+    S.verified++; S.lastLat=Date.now()-p.t;
+    handle(p);
+  };
+  es.onerror=()=>{ S.connected=false; setLive("bad","RECONNECTING"); };
+}
+setInterval(()=>{ // watchdog: ticks arrive every few seconds while a viewer is present
+  const idle=Date.now()-S.lastMsgAt;
+  if(S.es && idle>25000){ connect(); }
+  else if(S.connected){ const fresh=Date.now()-S.lastT<12000; setLive(fresh?"on":"warn",fresh?"LIVE":"WAITING"); }
+  renderAges();
+},1000);
+setInterval(()=>{ if(document.visibilityState==="visible") hello("ping"); },30000);
+document.addEventListener("visibilitychange",()=>{ if(document.visibilityState==="visible"){ if(Date.now()-S.lastMsgAt>8000) connect(); else hello("hello"); } });
+function setLive(c,t){ $("ldot").className="dot "+c; $("ltxt").textContent=t; }
+
+// ---------- state ----------
+function handle(p){
+  if(p.k==="event"){ addFeed(p.d,true); return; }
+  if(p.t<S.lastT) return; // stale / out-of-order snapshot
+  S.lastT=p.t;
+  const d=p.d;
+  if(p.k==="state"){
+    S.eq=(d.equity||[]).filter(x=>x[0]&&x[1]!=null);
+    (d.feed||[]).forEach(f=>addFeed(f,false));
+  }
+  if(d.pf&&d.pf.equity_sol!=null&&d.server_ms){ pushEq([d.server_ms,d.pf.equity_sol]); }
+  const prev=S.state; S.state=Object.assign({},S.state||{},d);
+  $("wait").style.display="none"; $("app").style.display="block";
+  render(prev);
+}
+function pushEq(pt){ const L=S.eq; if(L.length&&pt[0]<=L[L.length-1][0]) return; L.push(pt); if(L.length>800) L.splice(0,L.length-800); animateChart(); }
+function addFeed(f,live){ if(!f||!f.id||S.feed.has(f.id)) return; S.feed.set(f.id,f); renderFeed(live?f.id:null); }
+
+// ---------- render ----------
+let lastEq=null;
+function render(prev){
+  const d=S.state, pf=d.pf||{}, st=d.stats||{};
+  const eq=pf.equity_sol;
+  const el=$("eq"); el.innerHTML=(eq==null?"–":eq.toFixed(4))+"<small>SOL</small>";
+  if(lastEq!=null&&eq!=null&&eq!==lastEq){ el.classList.remove("flash-up","flash-dn"); void el.offsetWidth; el.classList.add(eq>lastEq?"flash-up":"flash-dn"); }
+  lastEq=eq;
+  $("usd").textContent=(d.sol_usd&&eq!=null)?`≈ $${(eq*d.sol_usd).toLocaleString("en-US",{maximumFractionDigits:2})} · SOL $${d.sol_usd}`:"";
+  const opened=st.opened?Date.parse(st.opened):null;
+  const mult=(eq!=null&&pf.initial_balance_sol)?(eq/pf.initial_balance_sol):null;
+  $("sub").innerHTML=`in <b>${opened?dur(Date.now()-opened):"–"}</b> · <b>${st.trades??0}</b> trades · <b class="${cls(mult-1)}">${mult?mult.toFixed(3)+"×":"–"}</b> · <span class="${cls(pf.pct_return)}">${sgn(pf.pct_return,2)}%</span> from ${pf.initial_balance_sol??"–"} SOL`;
+  $("rpl").className="v mono "+cls(pf.realized_pnl_sol); $("rpl").textContent=sgn(pf.realized_pnl_sol,4);
+  $("upl").className="v mono "+cls(pf.unrealized_pnl_sol); $("upl").textContent=sgn(pf.unrealized_pnl_sol,4);
+  const day=d.day||{}; $("dpl").className="v mono "+cls(day.total_pnl_sol); $("dpl").textContent=day.halted?"HALTED":sgn(day.total_pnl_sol,4);
+  $("wl").textContent=`${st.wins??0} / ${st.losses??0}`;
+  // ticker
+  const tk=(d.tick||[]).map(t=>`<span class="tk">${safeUrl(t.img)?`<img src="${esc(t.img)}" loading="lazy" referrerpolicy="no-referrer">`:`<span class="av" style="display:inline-block"></span>`}<span class="s">${esc(t.sym)}</span><span class="mono">${px(t.px)}</span><span class="mono ${cls(t.h1)}">${t.h1==null?"":sgn(t.h1,2)+"%"}</span></span>`).join("");
+  const sig=(d.tick||[]).map(t=>t.sym+t.px).join();
+  if(sig!==S.tkSig){ S.tkSig=sig; $("track").innerHTML=tk+tk; }
+  // decision
+  const dc=d.decision||{};
+  if(dc.act){ $("deccard").style.display="";
+    $("dec").innerHTML=`<span class="tag t-${esc(dc.act)}">${esc(dc.act)}</span><div><div style="font-size:13px">${esc(dc.why||"")}</div><div class="meta" style="color:var(--mut);font-size:11px;margin-top:4px">${dc.evaluated??"–"} evaluated · ${dc.passed??"–"} passed screens${d.status&&d.status.scan_in_progress?" · scan running now":""}</div></div>`;
+    $("dect").textContent=fmtDT(dc.ms)+" CET"; } else $("deccard").style.display="none";
+  // positions
+  const ps=d.pos||[]; $("poscount").textContent=ps.length?ps.length+" open":"";
+  $("positions").innerHTML=ps.length?ps.map(p=>{
+    const lo=p.stop_price_usd,hi=p.target_price_usd,c=p.current_price_usd; let x=50;
+    if(lo&&hi&&c) x=Math.max(0,Math.min(100,(c-lo)/(hi-lo)*100));
+    return `<div class="prow">${safeUrl(p.image_url)?`<img class="av" src="${esc(p.image_url)}" referrerpolicy="no-referrer">`:`<div class="av"></div>`}
+      <div class="mid"><div class="sym">${esc(p.symbol)} <span class="meta">MC ${mc(p.current_mcap_usd)}</span></div>
+      <div class="meta mono">entry ${px(p.entry_price_usd)} → now ${px(p.current_price_usd)}</div>
+      <div class="meta mono">${p.sol_invested?.toFixed(4)} SOL in · value ${p.current_value_sol?.toFixed(4)}</div>
+      <div class="bar"><div class="sl"></div><div class="tp"></div><i style="left:calc(${x}% - 1px)"></i></div>
+      <div class="meta mono" style="display:flex;justify-content:space-between;font-size:9.5px;margin-top:2px"><span>stop ${px(lo)}</span><span>target ${px(hi)}</span></div></div>
+      <div class="rt"><div class="pnl mono ${cls(p.unrealized_pnl_sol)}">${sgn(p.unrealized_pnl_pct,2)}%</div><div class="meta mono ${cls(p.unrealized_pnl_sol)}">${sgn(p.unrealized_pnl_sol,4)} SOL</div><div class="meta">unrealized</div></div></div>`;}).join("")
+    :`<div class="empty">No open paper positions.</div>`;
+  renderPills();
+}
+function pill(n,st,ok,m,full){ return `<div class="pill${full?" full":""}"><div class="n">${n}</div><div class="st"><span class="dot ${ok}"></span>${esc(st)}</div><div class="m mono">${m}</div></div>`; }
+function renderPills(){
+  const d=S.state; if(!d) return; const s=d.status||{};
+  const eOk=s.engine==="ONLINE"&&Date.now()-(s.engine_hb_ms||0)<30000;
+  const relayOk=S.connected&&Date.now()-S.lastT<12000;
+  $("pills").innerHTML=
+    pill("GROK ENGINE",s.engine||"–",eOk?"on":"bad",`hb ${ago(s.engine_hb_ms)}${s.scan_in_progress?" · scanning":""}`)+
+    pill("SOLANA RPC",s.rpc||"–",s.rpc==="CONNECTED"?"on":"bad",`${esc(s.rpc_mode||"")} · ${s.rpc_rtt_ms??"–"} ms · tick ${ago(s.last_ws_tick_ms)}`)+
+    pill("MARKET DATA",s.mkt||"–",s.mkt==="CONNECTED"?"on":"bad",`dex ${s.dex_rtt_ms!=null?Math.round(s.dex_rtt_ms):"–"} ms · ${ago(s.last_dex_ms)}`)+
+    pill("WALLET","PAPER · NONE","warn","no wallet connected, by design")+
+    pill("EXECUTION ENGINE",s.exec||"PAPER","warn","simulated fills · no signing")+
+    pill("PHONE RELAY",relayOk?"STREAMING":"STALE",relayOk?"on":"warn",`last ${ago(S.lastT)} · ${S.lastLat!=null?S.lastLat+" ms":"–"} box→phone`);
+}
+function renderAges(){ if(S.state){ renderPills(); $("srvt").textContent=fmtT(S.lastT)+" CET"; renderFoot(); } }
+function renderFoot(){ $("foot").innerHTML=`relay: smee.io (public channel) · ${S.verified} signed msgs verified · ${S.rejected} rejected<br>times Europe/Brussels · data: local paper engine (DEX Screener, Solana RPC, RugCheck, GeckoTerminal)`; }
+const DEC=new Set(["BUY","SELL","HOLD","WAIT","DECISION","WHALE"]);
+function renderFeed(newId){
+  const all=[...S.feed.values()].sort((a,b)=>(b.ms||0)-(a.ms||0));
+  const list=(S.filter==="dec"?all.filter(f=>DEC.has(f.act)||DEC.has(f.typ)):all).slice(0,40);
+  $("feed").innerHTML=list.length?list.map(f=>{ const act=f.typ==="DECISION"?(f.act||"DECISION"):f.act;
+    return `<div class="fi"${f.id===newId?' style="background:#101b24"':""}><div class="tm mono">${fmtT(f.ms)}</div><div class="bd"><span class="tag t-${esc(act)}">${esc(act)}</span> <b>${esc(f.sym||"")}</b> <span style="color:var(--dim);font-size:10.5px">${esc(f.typ==="DECISION"?"scan decision":f.typ)}</span><div class="why">${esc(f.why||"")}${f.extra?" · "+esc(f.extra):""}</div></div></div>`;}).join("")
+    :`<div class="empty">No matching engine activity yet.</div>`;
+}
+$("fDec").onclick=()=>{S.filter="dec";$("fDec").className="on";$("fAll").className="";renderFeed();};
+$("fAll").onclick=()=>{S.filter="all";$("fAll").className="on";$("fDec").className="";renderFeed();};
+
+// ---------- animated equity chart ----------
+const cv=$("chart"), ctx=cv.getContext("2d"); let view=null, t0=0, from=null, to=null;
+function bounds(){ const L=S.eq; if(L.length<2) return null; let mn=Infinity,mx=-Infinity; for(const p of L){mn=Math.min(mn,p[1]);mx=Math.max(mx,p[1]);}
+  const ini=(S.state&&S.state.pf&&S.state.pf.initial_balance_sol)||null; if(ini){mn=Math.min(mn,ini);mx=Math.max(mx,ini);} const pad=Math.max((mx-mn)*0.15,0.002); return {x0:L[0][0],x1:L[L.length-1][0],y0:mn-pad,y1:mx+pad}; }
+function animateChart(){ const b=bounds(); if(!b) return; from=view||b; to=b; t0=performance.now(); if(!S.anim){ S.anim=1; requestAnimationFrame(frame);} }
+function lerp(a,b,t){return a+(b-a)*t}
+function frame(now){
+  const dpr=window.devicePixelRatio||1, W=cv.clientWidth, H=cv.clientHeight;
+  if(cv.width!==W*dpr){cv.width=W*dpr;cv.height=H*dpr;}
+  ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,W,H);
+  if(to){ const k=Math.min(1,(now-t0)/700), e=1-Math.pow(1-k,3);
+    view={x0:lerp(from.x0,to.x0,e),x1:lerp(from.x1,to.x1,e),y0:lerp(from.y0,to.y0,e),y1:lerp(from.y1,to.y1,e)};
+    const L=S.eq, padL=4,padR=54,padT=8,padB=18, w=W-padL-padR, h=H-padT-padB;
+    const X=x=>padL+(x-view.x0)/Math.max(1,view.x1-view.x0)*w, Y=y=>padT+(1-(y-view.y0)/(view.y1-view.y0))*h;
+    ctx.strokeStyle="#161d27"; ctx.lineWidth=1; ctx.fillStyle="#4d5868"; ctx.font="10px ui-monospace,Menlo,monospace";
+    for(let i=0;i<=3;i++){ const yv=view.y0+(view.y1-view.y0)*i/3, yy=Y(yv); ctx.beginPath(); ctx.moveTo(padL,yy); ctx.lineTo(padL+w,yy); ctx.stroke(); ctx.fillText(yv.toFixed(3),padL+w+6,yy+3); }
+    const ini=S.state&&S.state.pf&&S.state.pf.initial_balance_sol;
+    if(ini){ ctx.setLineDash([4,4]); ctx.strokeStyle="#3a4454"; ctx.beginPath(); ctx.moveTo(padL,Y(ini)); ctx.lineTo(padL+w,Y(ini)); ctx.stroke(); ctx.setLineDash([]); }
+    const last=L[L.length-1], up=ini?last[1]>=ini:true, col=up?"#22e39a":"#ff5470";
+    const g=ctx.createLinearGradient(0,padT,0,padT+h); g.addColorStop(0,up?"rgba(34,227,154,.28)":"rgba(255,84,112,.28)"); g.addColorStop(1,"rgba(0,0,0,0)");
+    ctx.beginPath(); L.forEach((p,i)=>{ const xx=X(p[0]),yy=Y(p[1]); i?ctx.lineTo(xx,yy):ctx.moveTo(xx,yy); });
+    ctx.lineTo(X(last[0]),padT+h); ctx.lineTo(X(L[0][0]),padT+h); ctx.closePath(); ctx.fillStyle=g; ctx.fill();
+    ctx.beginPath(); L.forEach((p,i)=>{ const xx=X(p[0]),yy=Y(p[1]); i?ctx.lineTo(xx,yy):ctx.moveTo(xx,yy); }); ctx.strokeStyle=col; ctx.lineWidth=2; ctx.lineJoin="round"; ctx.stroke();
+    const lx=X(last[0]), ly=Y(last[1]), pr=(now%1600)/1600;
+    ctx.beginPath(); ctx.arc(lx,ly,3+pr*9,0,7); ctx.fillStyle=up?`rgba(34,227,154,${.45*(1-pr)})`:`rgba(255,84,112,${.45*(1-pr)})`; ctx.fill();
+    ctx.beginPath(); ctx.arc(lx,ly,3.2,0,7); ctx.fillStyle=col; ctx.fill();
+    ctx.fillStyle="#7d8a9c"; ctx.fillText(fmtT(L[0][0]).slice(0,5),padL,H-4); const lt=fmtT(last[0]).slice(0,5); ctx.fillText(lt,padL+w-ctx.measureText(lt).width,H-4);
+    $("eqrange").textContent=`${L.length} pts · ${last[1].toFixed(4)}`;
+  }
+  requestAnimationFrame(frame);
+}
+if(!window.crypto||!crypto.subtle){ $("wait").textContent="This browser cannot verify signed data (needs HTTPS + WebCrypto), so nothing is shown."; }
+else connect();
+</script>
+</body>
+</html>
